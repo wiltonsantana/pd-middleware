@@ -15,8 +15,7 @@ type CalculatorProxy struct {
 }
 
 // NewCalculatorProxy creates a brand Calculator instance.
-func NewCalculatorProxy() Calculator {
-	client := distribution.NewClientProxy("localhost", 4000, 1)
+func NewCalculatorProxy(client distribution.ClientProxy) Calculator {
 	return CalculatorProxy{client}
 }
 
