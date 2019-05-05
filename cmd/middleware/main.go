@@ -1,14 +1,8 @@
 package main
 
-import (
-	"github.com/joaoaneto/pd-middleware/cmd/middleware/distribution"
-	"github.com/joaoaneto/pd-middleware/cmd/middleware/infrastructure"
-)
+import "github.com/joaoaneto/pd-middleware/cmd/middleware/app"
 
 func main() {
-	crh := infrastructure.NewClientRequestHandler("localhost", 4000)
-	marshaller := distribution.NewMarshaller()
-	requestor := distribution.NewRequestor(marshaller, crh)
-
-	requestor.Invoke()
+	calculatorProxy := app.NewCalculatorProxy()
+	calculatorProxy.Add(1, 4)
 }
