@@ -14,6 +14,13 @@ type ClientRequestHandler struct {
 	connection net.Conn
 }
 
+// NewClientRequestHandler creates a brand ClientRequestHandler instance.
+func NewClientRequestHandler(hostname string, port int) ClientRequestHandler {
+	crh := ClientRequestHandler{Hostname: hostname, Port: port}
+	crh.Connect()
+	return crh
+}
+
 // Connect establish a connection with the TCP server.
 func (crh *ClientRequestHandler) Connect() {
 	connection, err := net.Dial("tcp", buildURI(crh.Hostname, crh.Port))
