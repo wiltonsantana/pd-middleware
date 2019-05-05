@@ -1,8 +1,6 @@
 package distribution
 
 import (
-	"fmt"
-
 	"github.com/joaoaneto/pd-middleware/cmd/middleware/infrastructure"
 )
 
@@ -13,20 +11,22 @@ type Requestor struct {
 }
 
 // NewRequestor creates a brand requestor instance.
-func NewRequestor(marshaller Marshaller, chr infrastructure.ClientRequestHandler) Requestor {
-	return Requestor{marshaller, chr}
+func NewRequestor() Requestor {
+	return Requestor{}
 }
 
-func (requestor *Requestor) Invoke() {
-	message := createMessage()
-	fmt.Println(message)
+// Invoke create a encapsulated message and does the request to server.
+func (requestor *Requestor) Invoke(invocation Invocation) {
+	requestor.marshaller = NewMarshaller()
+	requestor.crh = infrastructure.NewClientRequestHandler(invocation.ipAddress, invocation.port)
+	message := createMessage(invocation.objectID, invocation.operationName, invocation.parameters)
 	messageMarshalled, _ := requestor.marshaller.Marshal(message)
 	requestor.crh.Send(messageMarshalled)
 }
 
-func createMessage() Message {
-	requestHeader := RequestHeader{0, "", true, 0, "add"}
-	requestBody := RequestBody{[]int{1, 2}}
+func createMessage(objectID int, operation string, parameters []int) Message {
+	requestHeader := RequestHeader{0, "", true, objectID, operation}
+	requestBody := RequestBody{parameters}
 
 	messageHeader := MessageHeader{"MIOP", 0, false, 0, 0}
 	messageBody := MessageBody{requestHeader: requestHeader, requestBody: requestBody}
