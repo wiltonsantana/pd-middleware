@@ -1,9 +1,11 @@
 package main
 
 import (
-	"fmt"
+	"github.com/joaoaneto/pd-middleware/cmd/middleware/infrastructure"
 )
 
 func main() {
-	fmt.Printf("Starting Middleware Exercise...")
+	crh := infrastructure.ClientRequestHandler{Hostname: "localhost", Port: 4000}
+	crh.Connect()
+	crh.Send([]byte("Hello World"))
 }
